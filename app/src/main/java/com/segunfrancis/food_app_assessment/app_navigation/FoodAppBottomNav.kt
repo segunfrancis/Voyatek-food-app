@@ -19,14 +19,27 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.segunfrancis.food_app_assessment.R
+import com.segunfrancis.food_app_assessment.ui.theme.Blue
+import com.segunfrancis.food_app_assessment.ui.theme.DefaultIconColor
+import com.segunfrancis.food_app_assessment.ui.theme.Grey2
+import com.segunfrancis.food_app_assessment.ui.theme.White
 
 @Composable
 fun FoodAppBottomNav(navController: NavHostController) {
     val navBackStack by navController.currentBackStackEntryAsState()
-    NavigationBar(modifier = Modifier.fillMaxWidth()) {
+    NavigationBar(
+        modifier = Modifier.fillMaxWidth(),
+        containerColor = White,
+        contentColor = White
+    ) {
         bottomNavItems.forEach { navItem ->
+            val isCurrentItem = (navBackStack?.destination?.hierarchy?.any {
+                it.hasRoute(
+                    navItem.route::class
+                )
+            } == true)
             NavigationBarItem(
-                selected = navBackStack?.destination?.hierarchy?.any { it.hasRoute(navItem.route::class) } == true,
+                selected = isCurrentItem,
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -39,24 +52,19 @@ fun FoodAppBottomNav(navController: NavHostController) {
                 },
                 icon = {
                     Icon(
-                        painter = if (navBackStack?.destination?.hierarchy?.any {
-                                it.hasRoute(
-                                    navItem.route::class
-                                )
-                            } == true) painterResource(navItem.iconSelected) else painterResource(
+                        painter = if (isCurrentItem) painterResource(navItem.iconSelected) else painterResource(
                             navItem.iconUnselected
                         ),
-                        contentDescription = navItem.label
+                        contentDescription = navItem.label,
+                        tint = if (isCurrentItem) Blue else DefaultIconColor
                     )
                 },
                 label = {
                     Text(
                         text = navItem.label,
-                        fontWeight = if (navBackStack?.destination?.hierarchy?.any {
-                                it.hasRoute(
-                                    navItem.route::class
-                                )
-                            } == true) FontWeight.SemiBold else FontWeight.Normal)
+                        fontWeight = if (isCurrentItem) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (isCurrentItem) Blue else DefaultIconColor
+                    )
                 }
             )
         }
