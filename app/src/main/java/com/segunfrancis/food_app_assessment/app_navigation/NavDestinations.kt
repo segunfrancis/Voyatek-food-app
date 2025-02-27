@@ -17,4 +17,7 @@ sealed class NavDestinations {
 
     @Serializable
     data object Planner : NavDestinations()
+
+    @Serializable
+    data object CreateFood : NavDestinations()
 }

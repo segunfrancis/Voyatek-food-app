@@ -15,7 +15,8 @@ fun AddScreen(modifier: Modifier = Modifier) {
     Text(
         text = "Add Screen",
         style = MaterialTheme.typography.titleMedium,
-        modifier = modifier.padding(24.dp)
+        modifier = modifier.padding(24.dp),
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }
 

@@ -12,6 +12,7 @@ fun PlannerScreen(modifier: Modifier = Modifier) {
     Text(
         text = "Planner Screen",
         style = MaterialTheme.typography.bodyLarge,
-        modifier = modifier.padding(24.dp)
+        modifier = modifier.padding(24.dp),
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }

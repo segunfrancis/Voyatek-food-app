@@ -1,14 +1,10 @@
 package com.segunfrancis.food_app_assessment.data
 
 import com.segunfrancis.food_app_assessment.data.remote.FoodApi
-import com.segunfrancis.food_app_assessment.data.repository.FoodRepository
-import com.segunfrancis.food_app_assessment.data.repository.FoodRepositoryImpl
 import com.segunfrancis.food_app_assessment.util.AppConstants.BASE_URL
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

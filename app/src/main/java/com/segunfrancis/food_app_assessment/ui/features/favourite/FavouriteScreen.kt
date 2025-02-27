@@ -12,6 +12,7 @@ fun FavouriteScreen(modifier: Modifier = Modifier) {
     Text(
         text = "Favourite Screen",
         style = MaterialTheme.typography.bodyLarge,
-        modifier = modifier.padding(24.dp)
+        modifier = modifier.padding(24.dp),
+        color = MaterialTheme.colorScheme.onSurfaceVariant
     )
 }

@@ -40,4 +40,14 @@ data class FoodImage(
 )
 
 @Serializable
+data class Tag(
+    val id: Int,
+    val name: String,
+    @SerialName("created_at")
+    val createdAt: String,
+    @SerialName("updated_at")
+    val updatedAt: String
+)
+
+@Serializable
 data class BaseResponse<T>(@SerialName("data") val data: T, val message: String, val status: String)

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,7 +22,6 @@ import androidx.navigation.compose.rememberNavController
 import com.segunfrancis.food_app_assessment.R
 import com.segunfrancis.food_app_assessment.ui.theme.Blue
 import com.segunfrancis.food_app_assessment.ui.theme.DefaultIconColor
-import com.segunfrancis.food_app_assessment.ui.theme.Grey2
 import com.segunfrancis.food_app_assessment.ui.theme.White
 
 @Composable
@@ -29,8 +29,7 @@ fun FoodAppBottomNav(navController: NavHostController) {
     val navBackStack by navController.currentBackStackEntryAsState()
     NavigationBar(
         modifier = Modifier.fillMaxWidth(),
-        containerColor = White,
-        contentColor = White
+        containerColor = White
     ) {
         bottomNavItems.forEach { navItem ->
             val isCurrentItem = (navBackStack?.destination?.hierarchy?.any {
@@ -40,6 +39,7 @@ fun FoodAppBottomNav(navController: NavHostController) {
             } == true)
             NavigationBarItem(
                 selected = isCurrentItem,
+                colors = NavigationBarItemDefaults.colors().copy(selectedIndicatorColor = White),
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {

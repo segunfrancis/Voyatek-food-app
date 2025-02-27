@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.segunfrancis.food_app_assessment.ui.theme.Black1
 import com.segunfrancis.food_app_assessment.ui.theme.Pink1
 import com.segunfrancis.food_app_assessment.ui.theme.VoyatekFoodAppTheme
 
@@ -19,7 +20,8 @@ fun TagComponent(tag: String) {
         style = MaterialTheme.typography.bodySmall,
         modifier = Modifier
             .background(color = Pink1, shape = RoundedCornerShape(8.dp))
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        color = Black1
     )
 }
 
@@ -30,5 +32,3 @@ fun TagComponentPreview() {
         TagComponent(tag = "healthy")
     }
 }
-
-val tags = listOf("healthy", "vegetarian")

@@ -1,12 +1,12 @@
 package com.segunfrancis.food_app_assessment.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Text
@@ -25,7 +25,6 @@ import com.segunfrancis.food_app_assessment.ui.theme.Grey1
 import com.segunfrancis.food_app_assessment.ui.theme.Grey2
 import com.segunfrancis.food_app_assessment.ui.theme.White
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChipGroup(chipItems: List<Category>, onItemClick: (Category) -> Unit) {
 
@@ -33,9 +32,9 @@ fun ChipGroup(chipItems: List<Category>, onItemClick: (Category) -> Unit) {
 
     LazyRow(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         itemsIndexed(chipItems) { index, chipItem ->
             val isSelected = selectedIndex == index
