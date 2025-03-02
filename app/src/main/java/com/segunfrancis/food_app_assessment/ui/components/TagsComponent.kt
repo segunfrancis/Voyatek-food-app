@@ -69,7 +69,7 @@ fun TagsComponent(modifier: Modifier = Modifier, tags: List<Tag>, onDelete: (Tag
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .background(color = Grey1, shape = RoundedCornerShape(2.dp))
-                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                            .padding(horizontal = 8.dp, vertical = 1.dp)
                             .height(25.dp)
                     ) {
                         Text(

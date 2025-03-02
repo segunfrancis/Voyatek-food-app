@@ -23,11 +23,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.segunfrancis.food_app_assessment.R
+import com.segunfrancis.food_app_assessment.app_navigation.CustomNavType
 import com.segunfrancis.food_app_assessment.app_navigation.FoodAppBottomNav
 import com.segunfrancis.food_app_assessment.app_navigation.NavDestinations
+import com.segunfrancis.food_app_assessment.data.remote.Food
 import com.segunfrancis.food_app_assessment.ui.features.add.AddScreen
 import com.segunfrancis.food_app_assessment.ui.features.create_food.CreateFoodScreen
+import com.segunfrancis.food_app_assessment.ui.features.details.FoodDetailsScreen
 import com.segunfrancis.food_app_assessment.ui.features.favourite.FavouriteScreen
 import com.segunfrancis.food_app_assessment.ui.features.generator.GeneratorScreen
 import com.segunfrancis.food_app_assessment.ui.features.home.HomeScreen
@@ -35,6 +39,7 @@ import com.segunfrancis.food_app_assessment.ui.features.planner.PlannerScreen
 import com.segunfrancis.food_app_assessment.ui.theme.Black1
 import com.segunfrancis.food_app_assessment.ui.theme.VoyatekFoodAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.reflect.typeOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -74,7 +79,11 @@ class MainActivity : ComponentActivity() {
                                     contentDescription = "Add food icon"
                                 )
                                 Spacer(Modifier.width(4.dp))
-                                Text(text = "Add Food", style = MaterialTheme.typography.bodyMedium, color = Black1)
+                                Text(
+                                    text = "Add Food",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = Black1
+                                )
                             }
                         }
                     }) { paddingValues ->
@@ -83,7 +92,12 @@ class MainActivity : ComponentActivity() {
                         startDestination = NavDestinations.Home
                     ) {
                         composable<NavDestinations.Home> {
-                            HomeScreen(modifier = Modifier.padding(paddingValues))
+                            HomeScreen(
+                                modifier = Modifier.padding(paddingValues),
+                                onFoodClick = { food ->
+                                    navController.navigate(route = NavDestinations.FoodDetails(food))
+                                    //Log.d("MainActivity", "Food: ${it.savedStateHandle.get<Food>("food")}")
+                                })
                         }
                         composable<NavDestinations.Generator> {
                             GeneratorScreen(modifier = Modifier.padding(paddingValues))
@@ -98,7 +112,11 @@ class MainActivity : ComponentActivity() {
                             PlannerScreen(modifier = Modifier.padding(paddingValues))
                         }
                         composable<NavDestinations.CreateFood> {
-                            CreateFoodScreen(onBackPress = { navController.navigateUp() } )
+                            CreateFoodScreen(onBackPress = { navController.navigateUp() })
+                        }
+                        composable<NavDestinations.FoodDetails>(typeMap = mapOf(typeOf<Food>() to CustomNavType.foodType)) {
+                            val arguments = it.toRoute<NavDestinations.FoodDetails>()
+                            FoodDetailsScreen(food = arguments.food, onBackClick = { navController.navigateUp() })
                         }
                     }
                 }

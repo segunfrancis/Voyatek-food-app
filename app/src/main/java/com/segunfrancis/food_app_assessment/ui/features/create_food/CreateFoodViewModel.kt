@@ -46,7 +46,7 @@ class CreateFoodViewModel @Inject constructor(private val repository: FoodReposi
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
     init {
-        _uiState.update { it.copy(categories = repository.getLocalCategories()) }
+        getCategories()
         getTags()
     }
 
@@ -133,6 +133,18 @@ class CreateFoodViewModel @Inject constructor(private val repository: FoodReposi
             repository.getTags()
                 .onSuccess { tags ->
                     _uiState.update { it.copy(tags = tags) }
+                }
+                .onFailure {
+                    _action.tryEmit(CreateFoodAction.ShowMessage(it.localizedMessage))
+                }
+        }
+    }
+
+    private fun getCategories() {
+        viewModelScope.launch(exceptionHandler) {
+            repository.getCategories()
+                .onSuccess { categories ->
+                    _uiState.update { it.copy(categories = categories) }
                 }
                 .onFailure {
                     _action.tryEmit(CreateFoodAction.ShowMessage(it.localizedMessage))

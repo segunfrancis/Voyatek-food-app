@@ -1,5 +1,6 @@
 package com.segunfrancis.food_app_assessment.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,9 +33,10 @@ fun ChipGroup(chipItems: List<Category>, onItemClick: (Category) -> Unit) {
 
     LazyRow(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(color = White),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp)
     ) {
         itemsIndexed(chipItems) { index, chipItem ->
             val isSelected = selectedIndex == index

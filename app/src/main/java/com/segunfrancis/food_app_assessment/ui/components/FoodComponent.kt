@@ -36,14 +36,14 @@ import com.segunfrancis.food_app_assessment.ui.theme.VoyatekFoodAppTheme
 import com.segunfrancis.food_app_assessment.ui.theme.White
 
 @Composable
-fun FoodComponent(food: Food, modifier: Modifier = Modifier) {
+fun FoodComponent(food: Food, modifier: Modifier = Modifier, onFoodClick:() -> Unit) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
         shape = RoundedCornerShape(4.dp),
         border = BorderStroke(width = 1.dp, color = Grey1),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         colors = CardDefaults.cardColors(containerColor = White),
-        onClick = {}) {
+        onClick = { onFoodClick() }) {
         Column {
             AsyncImage(
                 model = food.foodImages.firstOrNull()?.imageUrl,
@@ -121,7 +121,7 @@ fun FoodComponent(food: Food, modifier: Modifier = Modifier) {
 fun FoodComponentPreview() {
     VoyatekFoodAppTheme {
         FoodComponent(
-            Food(
+            food = Food(
                 category = categories.first(),
                 categoryId = 12,
                 calories = 120,
@@ -132,7 +132,8 @@ fun FoodComponentPreview() {
                 foodImages = emptyList(),
                 foodTags = listOf("healthy", "vegetarian"),
                 id = 2
-            )
+            ),
+            onFoodClick = {}
         )
     }
 }

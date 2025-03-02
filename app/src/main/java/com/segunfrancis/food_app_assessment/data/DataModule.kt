@@ -1,5 +1,6 @@
 package com.segunfrancis.food_app_assessment.data
 
+import com.segunfrancis.food_app_assessment.data.local.VoyatekAppDatabase
 import com.segunfrancis.food_app_assessment.data.remote.FoodApi
 import com.segunfrancis.food_app_assessment.util.AppConstants.BASE_URL
 import dagger.Module
@@ -65,6 +66,12 @@ object DataModule {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(FoodApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(): VoyatekAppDatabase {
+        return VoyatekAppDatabase()
     }
 }
 

@@ -14,7 +14,5 @@ interface FoodRepository {
 
     suspend fun createFood(food: CreateFood): Result<BaseResponse<Food>>
 
-    fun getLocalCategories(): List<Category>
-
     suspend fun getTags(): Result<List<Tag>>
 }

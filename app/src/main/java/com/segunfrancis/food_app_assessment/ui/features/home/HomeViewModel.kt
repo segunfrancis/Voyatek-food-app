@@ -54,7 +54,12 @@ class HomeViewModel @Inject constructor(private val repository: FoodRepository) 
                         description = ""
                     )
                 )
-                _uiState.update { it.copy(categories = updatedCategories) }
+                _uiState.update {
+                    it.copy(
+                        categories = updatedCategories,
+                        currentCategory = updatedCategories.first()
+                    )
+                }
             }
             .onFailure {
                 _action.tryEmit(HomeAction.ShowMessage(it.localizedMessage))

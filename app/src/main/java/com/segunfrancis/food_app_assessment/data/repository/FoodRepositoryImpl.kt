@@ -2,6 +2,7 @@ package com.segunfrancis.food_app_assessment.data.repository
 
 import android.content.Context
 import com.segunfrancis.food_app_assessment.data.IODispatcher
+import com.segunfrancis.food_app_assessment.data.local.VoyatekAppDatabase
 import com.segunfrancis.food_app_assessment.data.remote.BaseResponse
 import com.segunfrancis.food_app_assessment.data.remote.Category
 import com.segunfrancis.food_app_assessment.data.remote.Food
@@ -20,15 +21,11 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 
 class FoodRepositoryImpl @Inject constructor(
-    @IODispatcher private val dispatcher: CoroutineDispatcher,
     private val api: FoodApi,
+    private val database: VoyatekAppDatabase,
+    @IODispatcher private val dispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context
 ) : FoodRepository {
-
-    /**
-     * This is used to simulate a local storage
-     **/
-    private val categories = mutableListOf<Category>()
 
     override suspend fun getFoods(): Result<List<Food>> {
         return try {
@@ -42,12 +39,16 @@ class FoodRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCategories(): Result<List<Category>> {
+        var categories: List<Category> = emptyList()
         return try {
-            val response = withContext(dispatcher) { api.getCategories().data }
-            categories.addAll(response)
-            Result.success(response)
+            categories = database.getCategories().ifEmpty {
+                withContext(dispatcher) { api.getCategories().data }
+            }
+            Result.success(categories)
         } catch (t: Throwable) {
             Result.failure(t)
+        } finally {
+            database.setCategories(categories)
         }
     }
 
@@ -67,9 +68,9 @@ class FoodRepositoryImpl @Inject constructor(
                 val images = food.images.mapIndexed { index, uri ->
                     val imageFile = uriToFile(context, uri)
                     MultipartBody.Part.createFormData(
-                        "images[$index]",
-                        imageFile.name,
-                        imageFile.asRequestBody(getMediaTypeForFile(imageFile))
+                        name = "images[$index]",
+                        filename = "${imageFile.name}_$index",
+                        body = imageFile.asRequestBody(getMediaTypeForFile(imageFile))
                     )
                 }
                 val response = api.createFood(name, description, categoryId, calories, tags, images)
@@ -80,18 +81,19 @@ class FoodRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getLocalCategories(): List<Category> {
-        return categories
-    }
-
     override suspend fun getTags(): Result<List<Tag>> {
+        var tags: List<Tag> = emptyList()
         return try {
-            val response = withContext(dispatcher) {
-                api.getTags().data
+            tags = database.getTags().ifEmpty {
+                withContext(dispatcher) {
+                    api.getTags().data
+                }
             }
-            Result.success(response)
+            Result.success(tags)
         } catch (t: Throwable) {
             Result.failure(t)
+        } finally {
+            database.setTags(tags)
         }
     }
 }
