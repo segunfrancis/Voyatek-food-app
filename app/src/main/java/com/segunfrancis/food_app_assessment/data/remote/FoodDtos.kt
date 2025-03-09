@@ -56,3 +56,10 @@ data class Tag(
 
 @Serializable
 data class BaseResponse<T>(@SerialName("data") val data: T, val message: String, val status: String)
+
+@Serializable
+data class ErrorResponse(
+    val status: String,
+    val message: String,
+    val errors: Map<String, List<String>>? = null
+)

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.segunfrancis.food_app_assessment.data.remote.Category
 import com.segunfrancis.food_app_assessment.data.remote.Tag
 import com.segunfrancis.food_app_assessment.data.repository.FoodRepository
+import com.segunfrancis.food_app_assessment.util.handleThrowable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.BufferOverflow
@@ -37,11 +38,11 @@ class CreateFoodViewModel @Inject constructor(private val repository: FoodReposi
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _uiState.update { it.copy(isLoading = false) }
-        _action.tryEmit(CreateFoodAction.ShowMessage(throwable.localizedMessage))
+        _action.tryEmit(CreateFoodAction.ShowMessage(throwable.handleThrowable()))
     }
 
     val buttonState: StateFlow<Boolean> = uiState.map {
-        it.calories.isNotBlank() && it.description.isNotBlank() && it.name.isNotBlank() && it.category != null
+        it.calories.isNotBlank() && it.description.isNotBlank() && (it.name.isNotBlank() && it.name.length <= 30) && it.category != null
                 && it.selectedTags.isNotEmpty() && it.imageUris.isNotEmpty()
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), false)
 
@@ -103,7 +104,7 @@ class CreateFoodViewModel @Inject constructor(private val repository: FoodReposi
                     _action.tryEmit(CreateFoodAction.Success(it.message))
                 }
                 .onFailure {
-                    _action.tryEmit(CreateFoodAction.ShowMessage(it.localizedMessage))
+                    _action.tryEmit(CreateFoodAction.ShowMessage(it.handleThrowable()))
                 }
             _uiState.update { it.copy(isLoading = false) }
         }
@@ -135,7 +136,7 @@ class CreateFoodViewModel @Inject constructor(private val repository: FoodReposi
                     _uiState.update { it.copy(tags = tags) }
                 }
                 .onFailure {
-                    _action.tryEmit(CreateFoodAction.ShowMessage(it.localizedMessage))
+                    _action.tryEmit(CreateFoodAction.ShowMessage(it.handleThrowable()))
                 }
         }
     }
@@ -147,7 +148,7 @@ class CreateFoodViewModel @Inject constructor(private val repository: FoodReposi
                     _uiState.update { it.copy(categories = categories) }
                 }
                 .onFailure {
-                    _action.tryEmit(CreateFoodAction.ShowMessage(it.localizedMessage))
+                    _action.tryEmit(CreateFoodAction.ShowMessage(it.handleThrowable()))
                 }
         }
     }

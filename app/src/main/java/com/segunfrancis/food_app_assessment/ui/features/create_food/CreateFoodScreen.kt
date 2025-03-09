@@ -282,7 +282,19 @@ fun CreateFoodContent(
                     )
                 },
                 singleLine = true,
-                textStyle = MaterialTheme.typography.bodyMedium
+                textStyle = MaterialTheme.typography.bodyMedium,
+                supportingText = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        Text(
+                            text = "${uiState.name.length}/30",
+                            color = if (uiState.name.length > 30) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                },
+                isError = uiState.name.length > 30
             )
 
             Spacer(Modifier.height(12.dp))

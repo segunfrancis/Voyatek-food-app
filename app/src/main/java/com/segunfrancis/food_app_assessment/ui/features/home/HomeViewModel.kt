@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.segunfrancis.food_app_assessment.data.remote.Category
 import com.segunfrancis.food_app_assessment.data.remote.Food
 import com.segunfrancis.food_app_assessment.data.repository.FoodRepository
+import com.segunfrancis.food_app_assessment.util.handleThrowable
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.channels.BufferOverflow
@@ -32,7 +33,7 @@ class HomeViewModel @Inject constructor(private val repository: FoodRepository) 
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _uiState.update { it.copy(isLoading = false) }
-        _action.tryEmit(HomeAction.ShowMessage(throwable.localizedMessage))
+        _action.tryEmit(HomeAction.ShowMessage(throwable.handleThrowable()))
     }
 
     init {
@@ -62,7 +63,7 @@ class HomeViewModel @Inject constructor(private val repository: FoodRepository) 
                 }
             }
             .onFailure {
-                _action.tryEmit(HomeAction.ShowMessage(it.localizedMessage))
+                _action.tryEmit(HomeAction.ShowMessage(it.handleThrowable()))
             }
     }
 
@@ -75,7 +76,7 @@ class HomeViewModel @Inject constructor(private val repository: FoodRepository) 
                 _uiState.update { it.copy(foods = originalFoodList) }
             }
             .onFailure {
-                _action.tryEmit(HomeAction.ShowMessage(it.localizedMessage))
+                _action.tryEmit(HomeAction.ShowMessage(it.handleThrowable()))
             }
         _uiState.update { it.copy(isLoading = false) }
     }
